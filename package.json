@@ -4,7 +4,8 @@
   "description": "A simple blogging app for the QA class",
   "main": "index.js",
   "scripts": {
-    "test": "test.js"
+    "start": "node index.js",
+    "test": "node test.js"
   },
   "author": "A. Saad Imran",
   "license": "ISC",
