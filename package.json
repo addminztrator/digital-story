@@ -1,0 +1,14 @@
+{
+  "name": "digital-story",
+  "version": "1.0.0",
+  "description": "A simple blogging app for the QA class",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "author": "A. Saad Imran",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
