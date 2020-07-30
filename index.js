@@ -52,11 +52,22 @@ app.get('/', async (req, res) => {
 		var hash = cookie[1]
 		if (hash == sha512(username)){
 			loggedIn = true
-			res.render('index.html', {signedIn: loggedIn, username: username, id: username, posts: posts.rows});
+			if (posts){
+				res.render('index.html', {signedIn: loggedIn, username: username, id: username, posts: posts.rows});
+			}
+			else{
+				res.render('index.html', {signedIn: loggedIn, username: username, id: username});
+			}
+			
 		}
 	}
 	if (!loggedIn){
-		res.render('index.html', {posts: posts.rows});  
+		if (posts){
+			res.render('index.html', {posts: posts.rows}); 
+		}
+		else{
+			res.render('index.html'); 
+		} 
 	}
 })
 
