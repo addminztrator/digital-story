@@ -13,10 +13,19 @@ var crypto = require("crypto")
 const { Pool } = require('pg');
 
 // Test
+/*
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres: @localhost:5432/postgres',
+  connectionString: 'postgresql://postgres: @localhost:5432/postgres',
   ssl: process.env.DATABASE_URL ? true : false
 });
+*/
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
 
 var app = express()
 
