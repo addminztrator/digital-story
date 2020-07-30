@@ -55,12 +55,10 @@
 							<h2>{{post.title}}</h2>
 							<h6>Posted by <i>{{post.username}}</i> at {{post.created}}</h6>
 							<p>{{post.preview}}</p>
-							<ul class="actions stacked">
-								<li><a href="/posts/{{post.id}}" class="button">Read</a></li>
-								{% if username == post.username %}
-								<li><a href="/delete/{{post.id}}" class="button">Delete</a></li>
-								{% endif %}
-							</ul>
+							<a href="/posts/{{post.id}}" class="button">Read</a>
+							{% if username == post.username %}
+								<a href="/delete/{{post.id}}" class="button">Delete</a>
+							{% endif %}
 						</div>
 					</section>
 					{% endfor %}

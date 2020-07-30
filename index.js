@@ -19,13 +19,13 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL ? true : false
 });
 */
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
-
 
 var app = express()
 
@@ -186,7 +186,6 @@ app.post('/login', async (req, res) => {
 	try {
       const client = await pool.connect();
 	  const result = await client.query(`SELECT username,password FROM users where username='${username}'`);
-	  console.log(result.rows);
 	  if (result.rows[0].username == username && result.rows[0].password == sha512(pw)){
 		  var uhash = sha512(username);
 		  res.cookie('user', `${username},${uhash}`);
