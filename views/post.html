@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block title %} 
+	<title>Digital Story | {{title}}</title>
+{% endblock %}
+{% block page %}
+	<h1>{{title}}</h1>
+	<form method="post">
+		<input type="text" name="title" placeholder="title"/>
+		<input type="text" name="preview" placeholder="preview"/>
+		<textarea name="content" placeholder="content"></textarea>
+		<br>
+		<input type="submit" value="Post"/>
+	</form>
+
+{% endblock %}

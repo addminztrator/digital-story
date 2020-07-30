@@ -10,6 +10,10 @@
   "author": "A. Saad Imran",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "nunjucks": "^3.2.2",
+    "pg": "^8.3.0",
+    "uuid": "^8.3.0"
   }
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		{% block title %} 
+		<title>Digital Story</title>
+		{% endblock %}
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="./assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
+
+				<!-- One -->
+				<!--invert goes in class for black theme-->
+					<section class="banner onload-image-fade-in  onload-content-fade-right style2 fullscreen orient-center content-align-center image-position-center">
+						<div class="content">
+							{% block page %} 
+							<h1>Digital Story</h1>
+							{% if signedIn %}
+							<p class="major">Welcome, {{username}}</p>
+							<!-- <a href="/user/{{id}}" class="button big wide smooth-scroll-middle">Profile</a>
+							<br> -->
+							<a href="/post" class="button big wide smooth-scroll-middle">Post</a>
+							<br>
+							<a href="/logout" class="button big wide smooth-scroll-middle">Logout</a>
+							{% else %}
+							<p class="major">A simple blogging platform for the QA class</p>
+							<a href="/login" class="button big wide smooth-scroll-middle">Login</a>
+							<br>
+							<a href="/register" class="button big wide smooth-scroll-middle">Register</a>
+							{% endif %}
+							<br> <br>
+							<a href="#content" class="button big wide smooth-scroll-middle">Explore</a>
+							{% endblock %}
+						</div>
+						<div class="image">
+							<!-- <img src="https://i.stack.imgur.com/7LbHC.jpg" alt="" /> -->
+							<img src="../images/banner.jpg" alt="" />
+						</div>
+					</section>
+					{% block content %} 
+					<div id ="content">
+					{% for post in posts %}
+					<section class="spotlight style1 image-position-center onscroll-image-fade-in">
+						<div class="content">
+							<h2>{{post.title}}</h2>
+							<h6>Posted by <i>{{post.username}}</i> at {{post.created}}</h6>
+							<p>{{post.preview}}</p>
+							<ul class="actions stacked">
+								<li><a href="/posts/{{post.id}}" class="button">Read</a></li>
+								{% if username == post.username %}
+								<li><a href="/delete/{{post.id}}" class="button">Delete</a></li>
+								{% endif %}
+							</ul>
+						</div>
+					</section>
+					{% endfor %}
+					</div>
+					{% endblock %}
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+
+	</body>
+</html>
