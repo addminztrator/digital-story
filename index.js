@@ -21,24 +21,24 @@ const { Pool } = require('pg');
 /*
 This statement is needed for testing on a local system. 
 Must be replaced with the statement below before deployment.
-*/
+
 const pool = new Pool({
   connectionString: 'postgresql://postgres: @localhost:5432/postgres',
   ssl: process.env.DATABASE_URL ? true : false
 });
+*/
 
 /*
 Connects to database on deployed app. 
 A local database is used for testing so this statement needs to be removed
 during local testing.
+*/
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
-
-*/
 
 var app = express()
 
