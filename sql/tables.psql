@@ -1,2 +1,3 @@
 create table users (id UUID PRIMARY KEY, username TEXT, password TEXT);
 create table posts (id UUID PRIMARY KEY, username text, title text, preview TEXT, content text, created TIMESTAMPTZ NOT NULL DEFAULT NOW());
+create table comments (id UUID PRIMARY KEY, post_id TEXT, author TEXT, content text, created TIMESTAMPTZ NOT NULL DEFAULT NOW());

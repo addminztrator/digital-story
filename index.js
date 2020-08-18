@@ -1,3 +1,9 @@
+/*
+	Author:	A. Saad Imran
+	Simple blogging application
+	August 17, 2020
+*/
+
 const express = require('express')
 const nunjucks  = require('nunjucks');
 const path = require('path')
@@ -12,20 +18,27 @@ var crypto = require("crypto")
 
 const { Pool } = require('pg');
 
-// Test
 /*
+This statement is needed for testing on a local system. 
+Must be replaced with the statement below before deployment.
+*/
 const pool = new Pool({
   connectionString: 'postgresql://postgres: @localhost:5432/postgres',
   ssl: process.env.DATABASE_URL ? true : false
 });
-*/
 
+/*
+Connects to database on deployed app. 
+A local database is used for testing so this statement needs to be removed
+during local testing.
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
+
+*/
 
 var app = express()
 
@@ -136,7 +149,12 @@ app.get('/post', function(req, res){
 		var hash = cookie[1]
 		if (hash == sha512(username)){
 			loggedIn = true
-			res.render('post.html', {title: 'Post'})
+			if (req.query.error){
+				res.render('post.html', {title: 'Post', error: 'Title and content cannot be empty'})
+			}
+			else {
+				res.render('post.html', {title: 'Post'})
+			}
 		}
 	}
 	if (!loggedIn){
@@ -150,6 +168,9 @@ app.post('/post', async (req, res) => {
 	var title = (req.body.title);
 	var preview = (req.body.preview);
 	var content = (req.body.content);
+	if (!title || !content){
+		res.redirect("/post?error=empty");
+	}
 	if (req.cookies.user){
 		var cookie = req.cookies.user.split(",")
 		var username = cookie[0]
@@ -181,7 +202,6 @@ app.get('/login', function (req, res) {
 
 app.post('/login', async (req, res) => {
 	var username = req.body.username;
-	//var email = req.body.email;
 	var pw = req.body.password;
 	try {
       const client = await pool.connect();
@@ -189,7 +209,6 @@ app.post('/login', async (req, res) => {
 	  if (result.rows[0].username == username && result.rows[0].password == sha512(pw)){
 		  var uhash = sha512(username);
 		  res.cookie('user', `${username},${uhash}`);
-		  //res.render('verify.html', {title: 'Verify email'}); 
 		  res.redirect("/"); 
 	  }
 	  else {

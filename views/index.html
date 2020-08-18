@@ -38,8 +38,6 @@
 							<br>
 							<a href="/register" class="button big wide smooth-scroll-middle">Register</a>
 							{% endif %}
-							<br> <br>
-							<a href="#content" class="button big wide smooth-scroll-middle">Explore</a>
 							{% endblock %}
 						</div>
 						<div class="image">
@@ -53,7 +51,12 @@
 					<section class="spotlight style1 image-position-center onscroll-image-fade-in">
 						<div class="content">
 							<h2>{{post.title}}</h2>
-							<h6>Posted by <i>{{post.username}}</i> at {{post.created}}</h6>
+							<p>Posted by <i>{{post.username}}</i> on <i id='{{post.id}}'></i></p>
+							<script>
+							var {{post.id | replace("-", "")}} = new Date('{{post.created}}');
+							date = document.getElementById("{{post.id}}");
+							date.innerHTML = {{post.id | replace("-", "")}}.toLocaleString();
+							</script>
 							<p>{{post.preview}}</p>
 							<a href="/posts/{{post.id}}" class="button">Read</a>
 							{% if username == post.username %}

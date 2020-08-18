@@ -4,7 +4,12 @@
 {% endblock %}
 {% block page %}
 	<h1>{{title}}</h1>
-	<h5>Posted by <i>{{username}}</i> at {{created}}</h5>
+	<p>Posted by <i>{{username}}</i> on <i id='{{id}}'></i></p>
+	<script>
+		var {{id | replace("-", "")}} = new Date('{{created}}');
+		date = document.getElementById("{{id}}");
+		date.innerHTML = {{id | replace("-", "")}}.toLocaleString();
+	</script>
 	<p>{{content}}</p>
 	{% if del %}
 	<a href="/delete/{{id}}" class="button big wide smooth-scroll-middle">Delete</a>
