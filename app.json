@@ -1,0 +1,11 @@
+{
+  "name": "digital-story",
+  "description": "A simple blogging app for the QA class",
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "./node_modules/.bin/mocha"
+      }
+    }
+  }
+}
