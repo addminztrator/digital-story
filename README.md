@@ -1,5 +1,7 @@
 # digital-story
 
+a simple blogging app in nodejs
+
 Front end template: 
 
 	Story by HTML5 UP
