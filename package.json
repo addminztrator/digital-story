@@ -4,6 +4,7 @@
   "description": "A simple blogging app for the QA class",
   "main": "index.js",
   "scripts": {
+    "prepublish": "mocha"
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha"
   },
