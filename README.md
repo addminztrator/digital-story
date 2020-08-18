@@ -2,6 +2,8 @@
 
 a simple blogging app in nodejs
 
+the automated tests should work before deployment each time a commit occurs on this repo
+
 Front end template: 
 
 	Story by HTML5 UP
