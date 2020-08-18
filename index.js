@@ -22,23 +22,26 @@ const { Pool } = require('pg');
 This statement is needed for testing on a local system. 
 Must be replaced with the statement below before deployment.
 
+
+*/
 const pool = new Pool({
   connectionString: 'postgresql://postgres: @localhost:5432/postgres',
   ssl: process.env.DATABASE_URL ? true : false
 });
-*/
 
 /*
 Connects to database on deployed app. 
 A local database is used for testing so this statement needs to be removed
 during local testing.
-*/
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
+*/
+
+
 
 var app = express()
 
@@ -94,7 +97,7 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/logout', function (req, res){
-	res.cookie('user', '');
+	res.clearCookie('user');
 	res.redirect('/');
 })
 
@@ -171,20 +174,22 @@ app.post('/post', async (req, res) => {
 	if (!title || !content){
 		res.redirect("/post?error=empty");
 	}
-	if (req.cookies.user){
-		var cookie = req.cookies.user.split(",")
-		var username = cookie[0]
-		var hash = cookie[1]
-		if (hash == sha512(username)){
-			loggedIn = true
-			try {
-			  const client = await pool.connect();
-			  const result = await client.query(`insert into posts values('${id}', '${username}', '${title}', '${preview}', '${content}')`);
-			  client.release();
-			  res.redirect('/posts/'+id);
-			} catch (err) {
-			  console.error(err);
-			  res.send("Error " + err);
+	else{
+		if (req.cookies.user){
+			var cookie = req.cookies.user.split(",")
+			var username = cookie[0]
+			var hash = cookie[1]
+			if (hash == sha512(username)){
+				loggedIn = true
+				try {
+				  const client = await pool.connect();
+				  const result = await client.query(`insert into posts values('${id}', '${username}', '${title}', '${preview}', '${content}')`);
+				  client.release();
+				  res.redirect('/posts/'+id);
+				} catch (err) {
+				  console.error(err);
+				  res.send("Error " + err);
+				}
 			}
 		}
 	}
@@ -233,7 +238,6 @@ app.get('/register', function (req, res) {
 app.post('/register', async (req, res) => {
 	var id = uuidv4();
 	var username = req.body.username;
-	//var email = req.body.email;
 	var pw = req.body.password;
 	try {
       const client = await pool.connect();
@@ -244,7 +248,6 @@ app.post('/register', async (req, res) => {
 		  var uhash = sha512(username);
 		  await client.query(`insert into users values('${id}', '${username}', '${pwhash}')`);
 		  res.cookie('user', `${username},${uhash}`);
-		  //res.render('verify.html', {title: 'Verify email'}); 
 		  res.redirect("/"); 
 	  }
 	  else {
@@ -258,6 +261,10 @@ app.post('/register', async (req, res) => {
     }
   } 
 )
+
+app.all('*', function(req, res) {
+  res.redirect("/");
+});
 
 /**
  * hash password with sha512.
