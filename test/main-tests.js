@@ -17,7 +17,7 @@ var host = 'http://digital-story.herokuapp.com';
 
 // Try requesting the main page and make sure server is running
 it('Check if app is running', function(done) {
-    request(host , function(error, response, body) {
+    request(host + "/", function(error, response, body) {
         expect(body).to.not.equal(null);
 		expect(body).to.not.equal(undefined);
         done();
