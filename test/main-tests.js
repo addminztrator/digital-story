@@ -102,7 +102,6 @@ describe('User functionality', function(){
 			});
 		});
 	});
-	var r = null;
 	describe('Post', function(){
 		it("App shouldn't allow posts without titles to be created", function(done){
 			request.cookie(`user=${cookie}`);
@@ -126,7 +125,6 @@ describe('User functionality', function(){
 			});
 		});
 	});
-	console.log(r);
 });
 
 console.log("Remember to point tests towards deployed code instead of localhost before commit.");
