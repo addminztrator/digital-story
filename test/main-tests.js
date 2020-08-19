@@ -2,9 +2,6 @@ var expect  = require('chai').expect;
 var request = require('request');
 var crypto = require("crypto");
 
-const j = request.jar()
-const request_cookie = request.defaults({jar: j})
-
 const { v4: uuidv4 } = require('uuid');
 const uuid = require('uuid');
 
