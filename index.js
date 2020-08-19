@@ -91,7 +91,7 @@ app.get('/', async (req, res) => {
 		posts = await client.query(`SELECT * FROM posts ORDER BY created DESC`);
 		client.release();
 	} catch (err) {
-	    console.error(err);
+		res.send("Error " + err);
 		error('A critical database error occured while grabbing posts for the main page');
 	}
 	if (req.cookies.user){
@@ -143,11 +143,12 @@ app.get('/delete/:id', async function (req, res){
 				  res.redirect("/");
 			  }
 			} catch(err){
-				log('A critical database error occured while user was attempting to delete post');
+				res.send("Error " + err);
+				error('A critical database error occured while user was attempting to delete post');
 			}
 		}
-		error('User not authorized to delete post');
 	}
+	error('User not authorized to delete post');
 })
 
 app.get('/posts/:id', async (req, res) => {
@@ -162,19 +163,22 @@ app.get('/posts/:id', async (req, res) => {
 		if (hash == sha512(username)){
 			if (result.rows[0].username == username){
 				del = true;
+				log('User viewed their own post while logged in');
 			}
+			else log('User viewed a post');
 		}
 	  }
 	  res.render('post_permalink.html', {title: result.rows[0].title, username: result.rows[0].username, content: result.rows[0].content, created: result.rows[0].created, id: result.rows[0].id, del: del})
       client.release();
     } catch (err) {
-      console.error(err);
+      error('A critical database error occured while user was attempting to view post');
       res.send("Error " + err);
     }
 });
 
 app.get('/post', function(req, res){
 	var loggedIn = false
+	log('User viewed post creation page');
 	if (req.cookies.user){
 		var cookie = req.cookies.user.split(",")
 		var username = cookie[0]
@@ -190,6 +194,7 @@ app.get('/post', function(req, res){
 		}
 	}
 	if (!loggedIn){
+		log('User viewed post creation page without logging in');
 		res.redirect('/'); 
 	}
 })
@@ -214,24 +219,30 @@ app.post('/post', async (req, res) => {
 				  const client = await pool.connect();
 				  const result = await client.query(`insert into posts values('${id}', '${username}', '${title}', '${preview}', '${content}')`);
 				  client.release();
+				  log('User created post');
 				  res.redirect('/posts/'+id);
 				} catch (err) {
-				  console.error(err);
+				  error('A critical database error occured while user was attempting to create a post');
 				  res.send("Error " + err);
 				}
 			}
 		}
 	}
 	if (!loggedIn){
+		log('User tried to create a post without logging in');
 		res.redirect('/');
 	}
 })
 
 app.get('/login', function (req, res) {
 	if (req.query.error == "invalid"){
+		log('User viewed login page after logging in with improper credentials');
 		res.render('login.html', {title: 'Login', error: 'Invalid username or password'}); 
 	}
-	else res.render('login.html', {title: 'Login'}); 
+	else {
+		log('User viewed login page');
+		res.render('login.html', {title: 'Login'}); 
+	}
 })
 
 app.post('/login', async (req, res) => {
@@ -243,25 +254,30 @@ app.post('/login', async (req, res) => {
 	  if (result.rows[0].username == username && result.rows[0].password == sha512(pw)){
 		  var uhash = sha512(username);
 		  res.cookie('user', `${username},${uhash}`);
+		  log('User logged in');
 		  res.redirect("/"); 
 	  }
 	  else {
+		  log('User tried to login with improper credentials');
 		  res.redirect("/login?error=invalid"); 
 	  }
 	  
       client.release();
     } catch (err) {
-      console.error(err);
+      error('A critical database error occured while user was attempting to login');
       res.send("Error " + err);
     }
   } 
 )
 
 app.get('/register', function (req, res) {
+	log('User visited the register page');
 	if (req.query.error == "username_exists"){
 		res.render('register.html', {title: 'Register', error: 'Username exists'}); 
 	}
-	else res.render('register.html', {title: 'Register'}); 
+	else {
+		res.render('register.html', {title: 'Register'}); 
+	}
 })
 
 app.post('/register', async (req, res) => {
@@ -277,15 +293,17 @@ app.post('/register', async (req, res) => {
 		  var uhash = sha512(username);
 		  await client.query(`insert into users values('${id}', '${username}', '${pwhash}')`);
 		  res.cookie('user', `${username},${uhash}`);
+		  log(`${username} registered`);
 		  res.redirect("/"); 
 	  }
 	  else {
+		  log('User tried to register with username which already exists');
 		  res.redirect("/register?error=username_exists"); 
 	  }
 	  
       client.release();
     } catch (err) {
-      console.error(err);
+      error('A critical database error occured while user was attempting to create an account');
       res.send("Error " + err);
     }
   } 
@@ -308,4 +326,4 @@ var sha512 = function(password){
     return value;
 };
 
-app.listen(PORT, function(){ console.log("Listening on port " + PORT); })
+app.listen(PORT, function(){ log("Listening on port " + PORT); })
