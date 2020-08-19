@@ -33,7 +33,7 @@ var logger = Logger.setupDefaultLogger('c43a327f0bc60da87e86d341e7a11e3e', optio
 
 
 var log = function() {
-    logger.log([...arguments].join(' '));
+    logger.info([...arguments].join(' '));
     _log.apply(console, arguments);
 };
 
