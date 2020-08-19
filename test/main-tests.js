@@ -11,9 +11,9 @@ const uuid = require('uuid');
 var user = "test_"+uuidv4();
 
 // for local tests
-var host = 'http://localhost:5000';
+//var host = 'http://localhost:5000';
 
-//var host = 'http://digital-story.herokuapp.com';
+var host = 'http://digital-story.herokuapp.com';
 
 // Try requesting the main page and make sure server is running
 it('Check if app is running', function(done) {
