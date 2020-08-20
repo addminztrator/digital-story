@@ -1,10 +1,23 @@
+/*
+	Author:	A. Saad Imran
+	Automated tests for the blogging application
+	These can be run on the local server by pointing to localhost
+	Heroku CI is configured to run these tests on each commit to repo before deploy
+	Final version: August 19, 2020
+*/
+// Chai expect is used for assertions
 var expect  = require('chai').expect;
+// Request is used for making HTTP requests for automated testing
 var request = require('request');
+// sha512 needs to be used to verify test results
 var crypto = require("crypto");
 
 const { v4: uuidv4 } = require('uuid');
 const uuid = require('uuid');
 
+// We're generating a unique username here
+// Using the test_ prefix with a uuid allows us to audit these entries
+// in the database or delete them easily after the tests have run
 var user = "test_"+uuidv4();
 
 // for local tests
@@ -124,6 +137,7 @@ describe('User functionality', function(){
 	});
 });
 
+// Should be its own module but I just copy pasted due to laziness
 /**
  * hash password with sha512.
  * @function
